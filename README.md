@@ -1,0 +1,78 @@
+# itinerance.ch — version statique HTML / CSS / JSON
+
+## Structure
+```
+index.html        accueil (texte d'intro + 3 dernières news)
+blog.html         liste des articles (recherche + filtre par année)
+post.html?id=57   un article
+page.html?p=ete   n'importe quelle page (été, hiver, ailleurs, qui-suis-je, contact, via-alpina, sous-pages…)
+data/posts.json   tous les articles du blog
+data/pages.json   toutes les pages
+media/            images et PDF
+css/style.css     mise en page
+js/app.js         menus + affichage à partir des JSON
+scraper/scrape.py récupère tout le contenu de l'ancien site
+404.html          redirige les anciennes adresses .php vers les nouvelles
+.github/workflows importe l'ancien site depuis GitHub (bouton « Run workflow »)
+```
+
+## 1. Mettre le dépôt sur GitHub
+Crée un dépôt **public** vide sur github.com (par ex. `itinerance`), puis dans ce dossier :
+```
+git init -b main
+git add .
+git commit -m "Nouveau site itinerance.ch"
+git remote add origin https://github.com/TON-COMPTE/itinerance.git
+git push -u origin main
+```
+(Évite l'upload par glisser-déposer dans le navigateur : il oublie souvent les dossiers cachés
+`.github` et `.nojekyll`.)
+
+Puis **Settings → Pages → Build and deployment** : Source « Deploy from a branch », branche `main`,
+dossier `/ (root)`. Après environ une minute, le site est en ligne sur `https://TON-COMPTE.github.io/itinerance/`.
+
+## 2. Importer le contenu de l'ancien site (à faire AVANT de changer le DNS)
+Onglet **Actions → Importer l'ancien site → Run workflow**. GitHub aspire toutes les pages et
+tous les articles, télécharge les images dans `media/`, remplit `data/posts.json` et
+`data/pages.json`, puis enregistre le tout dans le dépôt. Le site se met à jour tout seul.
+
+Le rapport (`scraper/rapport.txt`) indique pour chaque page le conteneur de contenu détecté
+(par ex. `td#contenu`). Si des menus ou la colonne de droite apparaissent encore, regarde un
+fichier de `scraper/raw/`, trouve le bon conteneur et relance l'action en le mettant dans le
+champ « Sélecteur CSS » (par ex. `div#contenu`).
+
+Variante en local : `pip install requests beautifulsoup4 && python scraper/scrape.py`, puis
+`git add . && git commit -m import && git push`.
+
+Pour tester en local : `python -m http.server` puis http://localhost:8000. Ouvrir directement
+`index.html` ne marche pas, car le navigateur bloque la lecture des JSON.
+
+## 3. Ajouter un article
+Ajouter un objet au début de `data/posts.json` :
+```json
+{
+  "id": 58,
+  "slug": "mon-nouvel-article",
+  "title": "Titre",
+  "date": "2026-10-01",
+  "excerpt": "Deux lignes de résumé…",
+  "cover": "media/photo.jpg",
+  "html": "<p>Texte de l'article</p><p><img src=\"media/photo.jpg\" alt=\"\"></p>"
+}
+```
+Le blog est trié par date. `cover` est optionnel (null = pas d'image sur la carte).
+
+## 4. Brancher le domaine www.itinerance.ch
+Seulement une fois l'import terminé et vérifié : après le changement de DNS, l'ancien site
+n'est plus accessible.
+
+1. **Settings → Pages → Custom domain** : `www.itinerance.ch`, puis cocher « Enforce HTTPS »
+   dès que GitHub le propose.
+2. Chez le registrar du domaine (zone DNS) :
+   - `www`  CNAME → `TON-COMPTE.github.io`
+   - `@`    A     → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+3. La propagation prend de quelques minutes à quelques heures.
+
+Les anciennes adresses (`/pages/posts/…-57.php`, `/pages/ete.php`…) sont redirigées
+automatiquement vers les nouvelles par `404.html`. Les liens Google et les favoris continuent
+donc de marcher.
