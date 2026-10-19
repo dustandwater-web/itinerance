@@ -300,9 +300,12 @@ function menuRubrique(slug, pages) {
   const voisines = Object.keys(pages).filter((k) => k.startsWith(r + "-"));
   if (!voisines.length) return "";
   const titre = esc(pages[r]?.title || r);
+  // sur la page de la rubrique elle-même, le titre répéterait le h1 : on le laisse
+  // de côté. Sur une sous-page il sert de retour vers la rubrique, donc on le garde.
+  const surLaRubrique = slug === r;
   return `
-  <nav class="menu-rubrique" aria-label="Pages de la rubrique ${titre}">
-    <h2>${slug === r ? titre : `<a href="page.html?p=${r}">${titre}</a>`}</h2>
+  <nav class="menu-rubrique${surLaRubrique ? " sans-titre" : ""}" aria-label="Pages de la rubrique ${titre}">
+    ${surLaRubrique ? "" : `<h2><a href="page.html?p=${r}">${titre}</a></h2>`}
     <ul>${voisines.map((k) => `<li><a href="page.html?p=${k}"${
       k === slug ? ' aria-current="page"' : ""}>${esc(pages[k].title)}</a></li>`).join("")}</ul>
   </nav>`;
@@ -333,9 +336,12 @@ async function renderPage() {
   const prose = `<div class="prose">${p.html}</div>`;
   const avecCarte = PAGES_AVEC_CONTACT.includes(slug);
   const cote = avecCarte ? carteContact() : menuRubrique(slug, pages);
-  el.innerHTML = `<h1 class="page-title">${esc(p.title)}</h1>` + (cote
-    ? `<div class="grid">${prose}${cote}</div>`
-    : prose);
+  // sur une page de rubrique, le menu affiche déjà son nom en majuscules : le titre
+  // ferait doublon à l'écran. On le garde dans la page pour les lecteurs d'écran et
+  // les moteurs de recherche, simplement hors champ.
+  const titreEnDoublon = RUBRIQUES.includes(slug);
+  el.innerHTML = `<h1 class="page-title${titreEnDoublon ? " hors-ecran" : ""}">${esc(p.title)}</h1>`
+    + (cote ? `<div class="grid">${prose}${cote}</div>` : prose);
   if (avecCarte) retireCoordonnees(el.querySelector(".prose"));
   photos(el.querySelector(".prose"));
 }
