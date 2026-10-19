@@ -117,8 +117,12 @@ aside h2 { font-size: 22px; margin: 0 0 14px; }
 .prose img.walker, .prose img[src$="puce.gif"] { margin: 0 2px 0 0; border-radius: 0; }
 /* logos de certification : ramenés à une vignette que le texte longe */
 .prose p.has-badge { overflow: hidden; }
-.prose img.badge { float: left; max-height: 84px; width: auto; margin: 2px 16px 6px 0; }
-@media (max-width: 560px) { .prose img.badge { max-height: 62px; margin-right: 12px; } }
+.prose img.badge {
+  float: left; width: auto; margin: 2px 16px 6px 0;
+  max-height: 64px;   /* UIMLA est carré : la hauteur le gouverne */
+  max-width: 150px;   /* J+S et CCS sont très larges : la largeur les gouverne */
+}
+@media (max-width: 560px) { .prose img.badge { max-height: 50px; max-width: 120px; margin-right: 12px; } }
 .prose table { border-collapse: collapse; width: 100%; margin: 20px 0; }
 .prose td, .prose th { padding: 8px 10px; vertical-align: top; border-bottom: 1px solid var(--line); }
 .prose iframe { max-width: 100%; border: 0; }
