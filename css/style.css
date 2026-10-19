@@ -10,6 +10,8 @@
   --accent: #b23a2e;      /* rouge balisage */
   --accent-dark: #8e2c22;
   --glacier: #2c6e8a;
+  --olive: #b9bf55;       /* le vert du logo d'origine */
+  --olive-dark: #8a9138;  /* sa version lisible sur fond clair */
   --radius: 4px;
   --wrap: 1120px;
   --serif: "Fraunces", Georgia, "Times New Roman", serif;
@@ -43,7 +45,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.2; 
 .topbar a:hover, .topbar a[aria-current] { color: #fff; }
 .brand { padding: 26px 0 8px; }
 .brand a { color: #fff; text-decoration: none; }
-.brand h1 { color: #fff; font-size: clamp(38px, 7vw, 68px); margin: 0; letter-spacing: -0.5px; font-weight: 500; }
+.brand h1 { margin: 0; line-height: 0; }
+.brand .logo { display: block; width: clamp(210px, 40vw, 360px); height: auto; }
 .brand p { margin: 4px 0 0; font-family: var(--serif); font-style: italic; color: #b9c7d1; font-size: clamp(17px, 2.4vw, 22px); }
 .ridge { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 90px; display: block; }
 
@@ -57,7 +60,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.2; 
 .sections a[aria-current] { color: var(--ink); border-bottom-color: var(--accent); }
 
 /* ---------- mise en page ---------- */
-main { padding: 48px 0 72px; }
+main { padding: 48px 0 20px; }   /* la frise fournit la respiration du bas */
 .grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; }
 @media (max-width: 900px) { .grid { grid-template-columns: 1fr; gap: 40px; } }
 
@@ -67,9 +70,10 @@ main { padding: 48px 0 72px; }
 
 .levels { list-style: none; padding: 20px 24px; margin: 32px 0; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); }
 .levels li { display: flex; align-items: center; gap: 12px; padding: 4px 0; }
-.dots { display: inline-flex; gap: 4px; min-width: 52px; }
-.dot { width: 11px; height: 11px; border-radius: 50%; background: var(--accent); display: inline-block; }
-img[src$="puce.gif"] { width: auto; height: 11px; vertical-align: middle; margin-right: 2px; }
+.dots { display: inline-flex; align-items: flex-end; gap: 3px; min-width: 46px; }
+/* le petit randonneur du logo sert de pastille de niveau */
+.walker { display: inline-block; width: auto; height: 23px; vertical-align: -5px; margin: 0; }
+img[src$="puce.gif"] { width: auto; height: 23px; vertical-align: -5px; margin-right: 2px; }
 
 /* ---------- colonne latérale ---------- */
 aside h2 { font-size: 22px; margin: 0 0 14px; }
@@ -110,7 +114,7 @@ aside h2 { font-size: 22px; margin: 0 0 14px; }
 .meta { color: var(--mist); margin: 0 0 32px; }
 .prose { max-width: 760px; }
 .prose img { border-radius: 2px; margin: 8px 0; }
-.prose img[src$="puce.gif"] { margin: 0 2px 0 0; }
+.prose img.walker, .prose img[src$="puce.gif"] { margin: 0 2px 0 0; border-radius: 0; }
 .prose table { border-collapse: collapse; width: 100%; margin: 20px 0; }
 .prose td, .prose th { padding: 8px 10px; vertical-align: top; border-bottom: 1px solid var(--line); }
 .prose iframe { max-width: 100%; border: 0; }
@@ -170,6 +174,17 @@ aside h2 { font-size: 22px; margin: 0 0 14px; }
   .lb-prev { left: 6px; }
   .lb-next { right: 6px; }
   .lb-close { top: 10px; right: 10px; font-size: 20px; }
+}
+
+/* ---------- frise du bas, reprise du site d'origine ---------- */
+.frise {
+  display: block; width: 100%; height: auto;
+  margin: 0 0 -2px;   /* pleine largeur : l'horizon s'assoit sur le pied de page */
+}
+/* sur un écran étroit, la frise entière rendrait le randonneur minuscule :
+   on recadre sur lui plutôt que de tout réduire */
+@media (max-width: 700px) {
+  .frise { height: 112px; object-fit: cover; object-position: 68% bottom; }
 }
 
 /* ---------- pied de page ---------- */

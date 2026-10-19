@@ -43,7 +43,8 @@ function chrome(current) {
     <div class="wrap">
       <nav class="topbar" aria-label="Pages">${TOP_NAV.map(link).join("")}</nav>
       <div class="brand">
-        <a href="index.html"><h1>Itinérance alpine</h1></a>
+        <h1><a href="index.html"><img class="logo" src="images/logo-itinerance.svg"
+          alt="Itinérance alpine" width="245" height="59"></a></h1>
         <p>à la découverte des territoires alpins</p>
       </div>
     </div>
@@ -55,6 +56,7 @@ function chrome(current) {
   <nav class="sections" aria-label="Rubriques"><ul>${SECTIONS.map((s) => `<li>${link(s)}</li>`).join("")}</ul></nav>`;
 
   $("#footer").outerHTML = `
+  <img class="frise" src="images/frise.svg" alt="" aria-hidden="true" width="960" height="248">
   <footer class="site-footer">
     <div class="wrap">
       <span>© Vincent Tornay — Tous droits réservés — www.itinerance.ch</span>
@@ -162,6 +164,12 @@ function photos(root) {
   if (!root) return;
   rails(root);
   gallery(root);
+  // la puce de niveau de l'ancien site est déjà ce petit randonneur, mais en 11×19 px
+  // crénelés : on lui substitue le tracé vectoriel
+  for (const img of root.querySelectorAll('img[src$="puce.gif"]')) {
+    img.src = "images/randonneur.svg";
+    img.className = "walker";
+  }
   // quelques photos manquent déjà sur l'ancien site : pas d'icône cassée
   for (const img of root.querySelectorAll("img")) {
     const drop = () => (img.closest("a.shot") || img).remove();

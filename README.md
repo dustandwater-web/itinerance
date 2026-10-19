@@ -8,7 +8,8 @@ post.html?id=57   un article
 page.html?p=ete   n'importe quelle page (été, hiver, ailleurs, qui-suis-je, contact, via-alpina, sous-pages…)
 data/posts.json   tous les articles du blog
 data/pages.json   toutes les pages
-media/            images et PDF
+media/            images et PDF du contenu (remplis par l'import)
+images/           identité reprise du site d'origine, vectorisée : logo, randonneur, frise
 css/style.css     mise en page
 js/app.js         menus + affichage à partir des JSON
 scraper/scrape.py récupère tout le contenu de l'ancien site
@@ -82,7 +83,25 @@ Une photo absente de `media/` est simplement masquée, sans icône d'image cass�
 > maintenant en rangées (`drop_frame_slices()` dans `scraper/scrape.py`) et ne les télécharge
 > plus ; les fichiers de tranches encore présents dans `media/` ne servent plus à rien.
 
-## 5. Brancher le domaine www.itinerance.ch
+## 5. L'identité reprise de l'ancien site
+Le logo, le petit randonneur et la frise du bas viennent du site d'origine. Les GIF ont été
+vectorisés, donc ils restent nets sur tous les écrans et se recolorent depuis la CSS :
+
+```
+images/logo-itinerance.svg   le mot « itinérance » dans sa police d'origine, le randonneur
+                             à la place du i — utilisé comme titre dans l'en-tête
+images/randonneur.svg        le randonneur seul — pastille de niveau de difficulté
+images/frise.svg             la frise du bas, posée sur le pied de page
+```
+
+La frise est prolongée à plat de chaque côté dans son `viewBox`, pour que l'horizon atteigne
+les bords de la page quelle que soit sa largeur ; sous 700 px, la CSS recadre sur le
+randonneur plutôt que de tout réduire.
+
+Les pastilles de niveau de l'ancien site (`media/puce.gif`, 11×19 px crénelés) sont déjà ce
+même randonneur : `photos()` dans `js/app.js` leur substitue le tracé vectoriel à l'affichage.
+
+## 6. Brancher le domaine www.itinerance.ch
 Seulement une fois l'import terminé et vérifié : après le changement de DNS, l'ancien site
 n'est plus accessible.
 
