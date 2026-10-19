@@ -265,6 +265,25 @@ async function renderPost() {
   photos(el.querySelector(".prose"));
 }
 
+/* La carte « Me contacter » affiche déjà le mail et le téléphone : on retire les
+   lignes correspondantes du texte repris de l'ancien site, pour ne pas les répéter
+   sous la liste des diplômes. Le numéro est comparé sur ses seuls chiffres, donc
+   « +41 79 332 43 92 » et « 079.332.43.92 » se reconnaissent pareil. */
+function retireCoordonnees(root) {
+  const chiffres = (t) => t.replace(/\D/g, "");
+  const tel = chiffres(CONTACT.tel);
+  const promeneur = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const lignes = [];
+  for (let n = promeneur.nextNode(); n; n = promeneur.nextNode()) {
+    const c = chiffres(n.textContent);
+    if (n.textContent.includes(CONTACT.mail) || (c.length > 6 && tel.endsWith(c))) lignes.push(n);
+  }
+  for (const n of lignes) {
+    if (n.nextSibling?.nodeName === "BR") n.nextSibling.remove();
+    n.remove();
+  }
+}
+
 function carteContact() {
   return `
   <aside class="contact-card">
@@ -288,9 +307,11 @@ async function renderPage() {
   }
   document.title = `${p.title} ^ itinerance.ch`;
   const prose = `<div class="prose">${p.html}</div>`;
-  el.innerHTML = `<h1 class="page-title">${esc(p.title)}</h1>` + (PAGES_AVEC_CONTACT.includes(slug)
+  const avecCarte = PAGES_AVEC_CONTACT.includes(slug);
+  el.innerHTML = `<h1 class="page-title">${esc(p.title)}</h1>` + (avecCarte
     ? `<div class="grid">${prose}${carteContact()}</div>`
     : prose);
+  if (avecCarte) retireCoordonnees(el.querySelector(".prose"));
   photos(el.querySelector(".prose"));
 }
 
