@@ -183,6 +183,16 @@ function photos(root) {
         if (img.classList.contains("walker") || img.getAttribute("src").endsWith("pdf.gif")) continue;
         img.classList.add("badge");
         par.classList.add("has-badge");
+        // l'ancien site écartait le texte de l'image avec une suite d'espaces
+        // insécables (8 d'affilée devant « Accompagnateur ») ; elles ne se
+        // contractent pas, et le flottement du cadre s'en charge désormais
+        let n = img.nextSibling;
+        while (n && n.nodeType === 3 && !n.textContent.trim()) {
+          const suivant = n.nextSibling;
+          n.remove();
+          n = suivant;
+        }
+        if (n && n.nodeType === 3) n.textContent = n.textContent.replace(/^[\s\u00a0]+/, "");
       }
     }
   }
