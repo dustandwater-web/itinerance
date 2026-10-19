@@ -125,6 +125,53 @@ aside h2 { font-size: 22px; margin: 0 0 14px; }
 .back::before { content: "← "; }
 .notice { background: #fff7e6; border: 1px solid #f0d9a8; padding: 14px 18px; border-radius: var(--radius); font-size: 16px; }
 
+/* ---------- photos encadrées et galerie ---------- */
+.photo-rail { display: flex; flex-wrap: wrap; gap: 16px; margin: 6px 0 34px; padding: 0; }
+.shot {
+  flex: 1 1 190px; max-width: 264px; padding: 8px; line-height: 0; cursor: zoom-in;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(22, 34, 44, .07); text-decoration: none;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.shot:hover, .shot:focus-visible { transform: translateY(-2px); border-color: var(--mist); box-shadow: 0 7px 18px rgba(22, 34, 44, .15); }
+.shot img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 2px; margin: 0; }
+@media (max-width: 560px) { .shot { flex-basis: 100%; max-width: none; } }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 50; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(9, 15, 20, .93);
+}
+.lightbox[hidden] { display: none; }
+.lightbox img {
+  width: auto; height: auto; max-width: min(92vw, 600px); max-height: 84vh;
+  padding: 10px; background: var(--paper); border-radius: var(--radius);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .55);
+}
+.lightbox button {
+  flex: none; width: 46px; height: 46px; font-size: 30px; line-height: 1; cursor: pointer;
+  color: #fff; background: rgba(255, 255, 255, .12); border: 0; border-radius: 50%;
+}
+.lightbox button:hover { background: rgba(255, 255, 255, .24); }
+.lightbox button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+/* flèches posées sur les bords : elles tiennent à l'écran même en 320 px de large */
+.lb-prev, .lb-next { position: absolute; top: 50%; transform: translateY(-50%); }
+.lb-prev { left: 14px; }
+.lb-next { right: 14px; }
+.lb-close { position: absolute; top: 18px; right: 18px; font-size: 24px; }
+.lb-count {
+  position: absolute; bottom: 18px; left: 0; right: 0; margin: 0; text-align: center;
+  color: #c2ced7; font-size: 15px; text-shadow: 0 1px 3px rgba(0, 0, 0, .8);
+}
+.lightbox.single .lb-prev, .lightbox.single .lb-next { display: none; }
+@media (max-width: 560px) {
+  .lightbox { padding: 10px; }
+  .lightbox button { width: 38px; height: 38px; font-size: 24px; }
+  .lb-prev { left: 6px; }
+  .lb-next { right: 6px; }
+  .lb-close { top: 10px; right: 10px; font-size: 20px; }
+}
+
 /* ---------- pied de page ---------- */
 .site-footer { background: var(--night); color: #a9b6c0; font-size: 15px; padding: 28px 0; }
 .site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }

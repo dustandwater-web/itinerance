@@ -62,7 +62,27 @@ Ajouter un objet au début de `data/posts.json` :
 ```
 Le blog est trié par date. `cover` est optionnel (null = pas d'image sur la carte).
 
-## 4. Brancher le domaine www.itinerance.ch
+## 4. Ajouter ou changer des photos
+Une rangée de photos encadrées se déclare sur **une seule ligne**, à l'endroit voulu dans le
+`html` d'une page ou d'un article :
+```html
+<figure class="photo-rail" data-photos="media/une.jpg, media/deux.jpg"></figure>
+```
+Pour ajouter une photo : déposer le fichier dans `media/`, puis ajouter son nom à la liste.
+Pour en retirer une, ou changer l'ordre : modifier la liste. Rien d'autre à écrire — le cadre,
+le recadrage en 4:3, la mise en colonne sur mobile et la galerie (clic pour agrandir, flèches
+← →, Échap, clic sur le fond) sont construits par `rails()` dans `js/app.js`.
+
+Une page peut contenir plusieurs rangées, chacune à sa place : voir `hiver-week-end-trappeur`,
+où chaque section a la sienne. Le clic ouvre la galerie de toutes les photos de la page.
+Une photo absente de `media/` est simplement masquée, sans icône d'image cassée.
+
+> L'ancien site entourait ses photos d'un cadre découpé en tranches d'images collées au pixel
+> (`media/4_haut.jpg`, `media/4_img_h_g.jpg`, `media/2_mil_1.jpg`…). L'import les convertit
+> maintenant en rangées (`drop_frame_slices()` dans `scraper/scrape.py`) et ne les télécharge
+> plus ; les fichiers de tranches encore présents dans `media/` ne servent plus à rien.
+
+## 5. Brancher le domaine www.itinerance.ch
 Seulement une fois l'import terminé et vérifié : après le changement de DNS, l'ancien site
 n'est plus accessible.
 

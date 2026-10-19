@@ -54,6 +54,10 @@ POST_RE = re.compile(r"/pages/posts/(?P<slug>.+?)-?(?P<id>\d+)\.php$")
 DATE_RE = re.compile(r"\b(\d{2})[-./](\d{2})[-./](\d{4})\b")
 KEEP_ATTRS = {"href", "src", "alt", "title", "colspan", "rowspan", "width", "height", "allowfullscreen"}
 DOWNLOADABLE = re.compile(r"\.(jpe?g|png|gif|bmp|webp|svg|pdf|gpx|kml|kmz|zip|rar|docx?|xlsx?|pptx?|mp3|mp4|avi|wmv|mov|flv|swf)$", re.I)
+# cadres décoratifs découpés en tranches : 4_haut.jpg, 4_img_h_g.jpg, 2_mil_1.jpg…
+# (4_img_haut.jpg, 2_img_centre.jpg… sont les photos elles-mêmes : on les garde)
+FRAME_SLICE = re.compile(
+    r"^\d+_(?:haut|bas|gauche|droite|mil(?:_\d+)?|img_(?:[hbc]_)?[gd])\.(?:jpe?g|gif|png)$", re.I)
 # moteur de recherche, flux RSS/Atom, administration : pas des pages du site
 SKIP_RE = re.compile(r"(search|rss|atom|feed|login|admin|print)", re.I)
 
@@ -247,6 +251,41 @@ def main_content(soup, selector=None):
     return best
 
 
+def drop_frame_slices(el):
+    """L'ancien site entourait ses photos d'un cadre découpé en tranches collées au
+    pixel. On jette les tranches (inutile de les télécharger) et on renvoie les
+    paragraphes qui ne contiennent plus que les vraies photos : la CSS du nouveau
+    site refait le cadre."""
+    holders = []
+    for img in el.find_all("img"):
+        if not FRAME_SLICE.match((img.get("src") or "").split("/")[-1]):
+            continue
+        holder = img.find_parent("p") or img.parent
+        if holder is not None and not any(holder is h for h in holders):
+            holders.append(holder)
+        img.decompose()
+    return [h for h in holders
+            if h.parent is not None and not h.get_text(strip=True).strip("\xa0\u200b")]
+
+
+def frame_photos(holders):
+    """Déclare chaque ancienne rangée de photos sur une seule ligne :
+
+        <figure class="photo-rail" data-photos="media/une.jpg, media/deux.jpg"></figure>
+
+    Le site construit les vignettes encadrées, le recadrage et la galerie à partir de
+    cette liste (voir rails() dans js/app.js) ; ajouter une photo plus tard revient à
+    ajouter son nom de fichier à l'attribut, sans écrire de HTML."""
+    soup = BeautifulSoup("", "html.parser")
+    for holder in holders:
+        shots = [img.get("src", "") for img in holder.find_all("img")]
+        if not shots:
+            holder.decompose()          # un cadre qui n'entourait aucune photo
+            continue
+        holder.replace_with(soup.new_tag(
+            "figure", attrs={"class": "photo-rail", "data-photos": ", ".join(shots)}))
+
+
 def clean(el, base_url):
     """Nettoie le HTML, rapatrie les médias, réécrit les liens internes."""
     for tag in el.find_all(True):
@@ -256,6 +295,7 @@ def clean(el, base_url):
             tag.unwrap()
             continue
         tag.attrs = {k: v for k, v in tag.attrs.items() if k in KEEP_ATTRS}
+    framed = drop_frame_slices(el)
     for img in el.find_all("img"):
         src = img.get("src")
         if src:
@@ -263,6 +303,7 @@ def clean(el, base_url):
         img["loading"] = "lazy"
         if not img.get("alt"):
             img["alt"] = ""
+    frame_photos(framed)   # après le téléchargement : les href pointent sur media/
     for a in el.find_all("a"):
         href = a.get("href")
         if not href or href.startswith(("mailto:", "#", "javascript:")):

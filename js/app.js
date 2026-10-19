@@ -76,6 +76,100 @@ function card(p) {
   </article>`;
 }
 
+/* ---------- photos : rangées encadrées et galerie ----------
+   Une rangée de photos se déclare dans le contenu sur une seule ligne :
+
+     <figure class="photo-rail" data-photos="media/une.jpg, media/deux.jpg"></figure>
+
+   Ajouter une photo = déposer le fichier dans media/ et ajouter son nom à la liste ;
+   la retirer ou changer l'ordre se fait au même endroit. Le cadre, le recadrage et
+   la galerie sont construits ici, il n'y a pas de HTML à écrire.
+   (Les cadres découpés en tranches de l'ancien site sont convertis à l'import,
+   voir drop_frame_slices() dans scraper/scrape.py.) */
+function rails(root) {
+  for (const fig of root.querySelectorAll("figure.photo-rail[data-photos]")) {
+    const files = fig.dataset.photos.split(",").map((s) => s.trim()).filter(Boolean);
+    if (!files.length) { fig.remove(); continue; }
+    fig.replaceChildren(...files.map((src) => {
+      const a = document.createElement("a");
+      a.className = "shot";
+      a.href = src;                    // sans JS, ou clic milieu : ouvre la photo
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "";
+      img.loading = "lazy";
+      a.append(img);
+      return a;
+    }));
+  }
+}
+
+function gallery(root) {
+  const shots = [...root.querySelectorAll("a.shot")];
+  if (!shots.length) return;
+  let box, view, count, opener, i = 0;
+
+  const show = (n) => {
+    i = (n + shots.length) % shots.length;
+    const img = shots[i].querySelector("img");
+    view.src = img.getAttribute("src");
+    view.alt = img.alt || "";
+    count.textContent = shots.length > 1 ? `${i + 1} / ${shots.length}` : "";
+  };
+  const close = () => {
+    box.hidden = true;
+    document.documentElement.style.overflow = "";
+    opener?.focus();
+  };
+  const build = () => {
+    box = document.createElement("div");
+    box.className = `lightbox${shots.length > 1 ? "" : " single"}`;
+    box.hidden = true;
+    box.innerHTML = `
+      <button class="lb-close" type="button" aria-label="Fermer">&times;</button>
+      <button class="lb-prev" type="button" aria-label="Photo précédente">&lsaquo;</button>
+      <img alt="">
+      <button class="lb-next" type="button" aria-label="Photo suivante">&rsaquo;</button>
+      <p class="lb-count" aria-live="polite"></p>`;
+    document.body.append(box);
+    view = box.querySelector("img");
+    count = box.querySelector(".lb-count");
+    box.querySelector(".lb-close").addEventListener("click", close);
+    box.querySelector(".lb-prev").addEventListener("click", () => show(i - 1));
+    box.querySelector(".lb-next").addEventListener("click", () => show(i + 1));
+    box.addEventListener("click", (e) => { if (e.target === box) close(); });
+    document.addEventListener("keydown", (e) => {
+      if (box.hidden) return;
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowLeft") show(i - 1);
+      else if (e.key === "ArrowRight") show(i + 1);
+    });
+  };
+
+  shots.forEach((a, n) => a.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!box) build();
+    opener = a;
+    box.hidden = false;
+    document.documentElement.style.overflow = "hidden";
+    show(n);
+    box.querySelector(".lb-close").focus();
+  }));
+}
+
+/* remet d'aplomb les photos d'une page ou d'un article */
+function photos(root) {
+  if (!root) return;
+  rails(root);
+  gallery(root);
+  // quelques photos manquent déjà sur l'ancien site : pas d'icône cassée
+  for (const img of root.querySelectorAll("img")) {
+    const drop = () => (img.closest("a.shot") || img).remove();
+    if (img.complete && !img.naturalWidth) drop();
+    else img.addEventListener("error", drop, { once: true });
+  }
+}
+
 /* ---------- accueil ---------- */
 async function renderHome() {
   const posts = (await load("posts")) || [];
@@ -134,6 +228,7 @@ async function renderPost() {
       ${older ? `<a href="post.html?id=${older.id}"><small>← Plus ancien</small>${esc(older.title)}</a>` : "<span></span>"}
       ${newer ? `<a href="post.html?id=${newer.id}" style="text-align:right"><small>Plus récent →</small>${esc(newer.title)}</a>` : "<span></span>"}
     </nav>`;
+  photos(el.querySelector(".prose"));
 }
 
 /* ---------- page générique (été, hiver, ailleurs, tours…) ---------- */
@@ -149,6 +244,7 @@ async function renderPage() {
   }
   document.title = `${p.title} ^ itinerance.ch`;
   el.innerHTML = `<h1 class="page-title">${esc(p.title)}</h1><div class="prose">${p.html}</div>`;
+  photos(el.querySelector(".prose"));
 }
 
 /* ---------- démarrage ---------- */
