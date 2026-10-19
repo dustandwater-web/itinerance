@@ -13,6 +13,11 @@ const SECTIONS = [
   ["blog.html", "blog", "blog"],
 ];
 
+/* coordonnées reprises de la page contact de l'ancien site ; l'encart les rend
+   cliquables (mailto: et tel:), ce que le texte d'origine n'était pas. */
+const CONTACT = { nom: "Vincent Tornay", mail: "vincent@itinerance.ch", tel: "+41 79 332 43 92" };
+const PAGES_AVEC_CONTACT = ["contact", "qui-suis-je"];
+
 const params = new URLSearchParams(location.search);
 const $ = (sel) => document.querySelector(sel);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -45,7 +50,6 @@ function chrome(current) {
       <div class="brand">
         <h1><a href="index.html"><img class="logo" src="images/logo-itinerance.svg"
           alt="Itinérance alpine" width="245" height="59"></a></h1>
-        <p>à la découverte des territoires alpins</p>
       </div>
     </div>
     <svg class="ridge" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
@@ -170,6 +174,18 @@ function photos(root) {
     img.src = "images/randonneur.svg";
     img.className = "walker";
   }
+  // logos de certification posés devant leur texte : l'ancien site les servait en
+  // pleine résolution (jusqu'à 1032 px de large), on les ramène à la taille d'une
+  // vignette et on les fait longer le texte
+  for (const par of root.querySelectorAll("p")) {
+    if (par.textContent.replace(/[\s\u00a0\u200b]+/g, "")) {
+      for (const img of par.querySelectorAll("img")) {
+        if (img.classList.contains("walker") || img.getAttribute("src").endsWith("pdf.gif")) continue;
+        img.classList.add("badge");
+        par.classList.add("has-badge");
+      }
+    }
+  }
   // quelques photos manquent déjà sur l'ancien site : pas d'icône cassée
   for (const img of root.querySelectorAll("img")) {
     const drop = () => (img.closest("a.shot") || img).remove();
@@ -239,6 +255,16 @@ async function renderPost() {
   photos(el.querySelector(".prose"));
 }
 
+function carteContact() {
+  return `
+  <aside class="contact-card">
+    <h2>Me contacter</h2>
+    <p class="contact-nom">${esc(CONTACT.nom)}</p>
+    <p><a href="mailto:${esc(CONTACT.mail)}">${esc(CONTACT.mail)}</a></p>
+    <p><a href="tel:${esc(CONTACT.tel.replace(/\s/g, ""))}">${esc(CONTACT.tel)}</a></p>
+  </aside>`;
+}
+
 /* ---------- page générique (été, hiver, ailleurs, tours…) ---------- */
 async function renderPage() {
   const pages = (await load("pages")) || {};
@@ -251,7 +277,10 @@ async function renderPage() {
     return;
   }
   document.title = `${p.title} ^ itinerance.ch`;
-  el.innerHTML = `<h1 class="page-title">${esc(p.title)}</h1><div class="prose">${p.html}</div>`;
+  const prose = `<div class="prose">${p.html}</div>`;
+  el.innerHTML = `<h1 class="page-title">${esc(p.title)}</h1>` + (PAGES_AVEC_CONTACT.includes(slug)
+    ? `<div class="grid">${prose}${carteContact()}</div>`
+    : prose);
   photos(el.querySelector(".prose"));
 }
 

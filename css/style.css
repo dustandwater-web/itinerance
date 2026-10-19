@@ -115,6 +115,10 @@ aside h2 { font-size: 22px; margin: 0 0 14px; }
 .prose { max-width: 760px; }
 .prose img { border-radius: 2px; margin: 8px 0; }
 .prose img.walker, .prose img[src$="puce.gif"] { margin: 0 2px 0 0; border-radius: 0; }
+/* logos de certification : ramenés à une vignette que le texte longe */
+.prose p.has-badge { overflow: hidden; }
+.prose img.badge { float: left; max-height: 84px; width: auto; margin: 2px 16px 6px 0; }
+@media (max-width: 560px) { .prose img.badge { max-height: 62px; margin-right: 12px; } }
 .prose table { border-collapse: collapse; width: 100%; margin: 20px 0; }
 .prose td, .prose th { padding: 8px 10px; vertical-align: top; border-bottom: 1px solid var(--line); }
 .prose iframe { max-width: 100%; border: 0; }
@@ -175,6 +179,18 @@ aside h2 { font-size: 22px; margin: 0 0 14px; }
   .lb-next { right: 6px; }
   .lb-close { top: 10px; right: 10px; font-size: 20px; }
 }
+
+/* ---------- encart de contact (pages contact et qui-suis-je) ---------- */
+.contact-card {
+  align-self: start; padding: 20px 22px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+}
+.contact-card h2 { margin: 0 0 14px; font-size: 21px; }
+.contact-card p { margin: 0 0 10px; }
+.contact-card p:last-child { margin-bottom: 0; }
+.contact-nom { font-weight: 600; color: var(--night); }
+.contact-card a { font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+.contact-card a:hover { text-decoration: underline; }
 
 /* ---------- frise du bas, reprise du site d'origine ---------- */
 .frise {

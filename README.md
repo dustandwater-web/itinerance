@@ -101,6 +101,15 @@ randonneur plutôt que de tout réduire.
 Les pastilles de niveau de l'ancien site (`media/puce.gif`, 11×19 px crénelés) sont déjà ce
 même randonneur : `photos()` dans `js/app.js` leur substitue le tracé vectoriel à l'affichage.
 
+Les coordonnées de l'encart « Me contacter », affiché à droite des pages Contact et
+Qui suis-je, sont la constante `CONTACT` en tête de `js/app.js` : c'est là qu'il faut
+changer le mail ou le numéro de téléphone (l'encart en fait des liens `mailto:` et `tel:`).
+
+Les logos de certification de la page Qui suis-je étaient servis en pleine résolution par
+l'ancien site (jusqu'à 1032 px de large) ; `photos()` les ramène à une vignette de 84 px de
+haut que le texte longe. Tout logo ajouté de la même façon — une image au début d'un
+paragraphe qui porte aussi du texte — sera traité pareil, sans rien changer.
+
 ## 6. Brancher le domaine www.itinerance.ch
 Seulement une fois l'import terminé et vérifié : après le changement de DNS, l'ancien site
 n'est plus accessible.
