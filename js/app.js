@@ -18,6 +18,12 @@ const SECTIONS = [
 const CONTACT = { nom: "Vincent Tornay", mail: "vincent@itinerance.ch", tel: "+41 79 332 43 92" };
 const PAGES_AVEC_CONTACT = ["contact", "qui-suis-je"];
 
+/* Les sous-pages portent le slug de leur rubrique en préfixe (ete-tours-de-massifs,
+   via-alpina-medias…) : c'est ce qui permet de retrouver la rubrique d'une page et
+   de lister ses voisines, sans rien coder en dur. */
+const RUBRIQUES = ["ete", "hiver", "ailleurs", "via-alpina"];
+const rubriqueDe = (slug) => RUBRIQUES.find((r) => slug === r || slug.startsWith(r + "-"));
+
 const params = new URLSearchParams(location.search);
 const $ = (sel) => document.querySelector(sel);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -284,6 +290,24 @@ function retireCoordonnees(root) {
   }
 }
 
+/* Liste les pages d'une rubrique : l'ancien site les donnait dans une colonne de
+   navigation, et sans elle les voyages (Horizons polaires, Tours de massifs…)
+   n'étaient atteignables par aucun lien. Le titre renvoie à la rubrique dès qu'on
+   est sur l'une de ses pages. */
+function menuRubrique(slug, pages) {
+  const r = rubriqueDe(slug);
+  if (!r) return "";
+  const voisines = Object.keys(pages).filter((k) => k.startsWith(r + "-"));
+  if (!voisines.length) return "";
+  const titre = esc(pages[r]?.title || r);
+  return `
+  <nav class="menu-rubrique" aria-label="Pages de la rubrique ${titre}">
+    <h2>${slug === r ? titre : `<a href="page.html?p=${r}">${titre}</a>`}</h2>
+    <ul>${voisines.map((k) => `<li><a href="page.html?p=${k}"${
+      k === slug ? ' aria-current="page"' : ""}>${esc(pages[k].title)}</a></li>`).join("")}</ul>
+  </nav>`;
+}
+
 function carteContact() {
   return `
   <aside class="contact-card">
@@ -308,8 +332,9 @@ async function renderPage() {
   document.title = `${p.title} ^ itinerance.ch`;
   const prose = `<div class="prose">${p.html}</div>`;
   const avecCarte = PAGES_AVEC_CONTACT.includes(slug);
-  el.innerHTML = `<h1 class="page-title">${esc(p.title)}</h1>` + (avecCarte
-    ? `<div class="grid">${prose}${carteContact()}</div>`
+  const cote = avecCarte ? carteContact() : menuRubrique(slug, pages);
+  el.innerHTML = `<h1 class="page-title">${esc(p.title)}</h1>` + (cote
+    ? `<div class="grid">${prose}${cote}</div>`
     : prose);
   if (avecCarte) retireCoordonnees(el.querySelector(".prose"));
   photos(el.querySelector(".prose"));
@@ -317,8 +342,11 @@ async function renderPage() {
 
 /* ---------- démarrage ---------- */
 const page = document.body.dataset.page;
-const current = page === "page" ? params.get("p") : page;
-chrome(SECTIONS.concat(TOP_NAV).some(([, , k]) => k === current) ? current : (page === "post" ? "blog" : current));
+const slugCourant = page === "page" ? params.get("p") || "" : "";
+chrome(page === "page" ? (rubriqueDe(slugCourant) || slugCourant)
+     : page === "post" ? "blog"
+     : page === "home" ? "accueil"
+     : page);
 ({ home: renderHome, blog: renderBlog, post: renderPost, page: renderPage })[page]?.();
 
 if (location.protocol === "file:") {
