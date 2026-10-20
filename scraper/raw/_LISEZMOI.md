@@ -27,6 +27,24 @@ détail.
 Le champ `source` de `data/pages.json` et `data/posts.json` donne l'adresse
 d'origine de chaque page, ce qui permet de retrouver son fichier ici.
 
+## Fidélité de la reprise
+
+Vérifié depuis cette archive, page par page : **les 66 pages et articles du nouveau
+site citent exactement les mêmes médias que l'original, dans le même ordre**. Aucune
+photo perdue, aucune remplacée.
+
+Ce dernier point méritait d'être contrôlé : l'ancien site range ses médias dans de
+nombreux dossiers (`/media/`, `/media/hiver/`, `/blog/images/<date>/` pour les
+galeries d'articles, `/images/logos/`, `/documents/`), et l'import les aplatit tous
+dans `media/` au seul nom de fichier. Deux fichiers homonymes de dossiers différents
+se seraient donc écrasés, en silence. Sur les **304 médias** cités par l'ancien site,
+il n'y a **aucune collision de ce genre**.
+
+Un seul élément n'est pas repris : `dock.swf`, une animation Flash de 550×200 sur la
+page d'accueil (`_gabarit/dock.swf`). Flash est arrêté depuis fin 2020 et aucun
+navigateur ne l'exécute plus ; il n'y a rien à en faire, le fichier est conservé ici
+pour mémoire.
+
 ## Un piège à connaître
 
 Dans ces pages, les médias sont rangés en sous-dossiers
