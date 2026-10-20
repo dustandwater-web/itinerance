@@ -9,6 +9,7 @@ page.html?p=ete   n'importe quelle page (été, hiver, ailleurs, qui-suis-je, co
 data/posts.json   tous les articles du blog
 data/pages.json   toutes les pages
 media/            images et PDF du contenu (remplis par l'import)
+media/originaux/  pleine résolution des photos que le site sert allégées
 images/           identité reprise du site d'origine, vectorisée : logo, randonneur, frise
 css/style.css     mise en page
 js/app.js         menus + affichage à partir des JSON
@@ -115,6 +116,11 @@ Les logos de certification de la page Qui suis-je étaient servis en pleine rés
 l'ancien site (jusqu'à 1032 px de large) ; `photos()` les ramène à une vignette de 84 px de
 haut que le texte longe. Tout logo ajouté de la même façon — une image au début d'un
 paragraphe qui porte aussi du texte — sera traité pareil, sans rien changer.
+
+Deux photos de l'article 53 sortaient de l'appareil sans avoir été réduites : 3648 × 2736,
+3,9 Mo à elles deux, pour un affichage sur 760 px de large au plus. Elles sont ramenées à
+1200 px (198 et 154 Ko) et leurs originaux sont conservés dans `media/originaux/`. Un nouvel
+import les retéléchargerait en pleine résolution, il faudrait refaire la réduction.
 
 ## 6. Brancher le domaine www.itinerance.ch
 Seulement une fois l'import terminé et vérifié : après le changement de DNS, l'ancien site
