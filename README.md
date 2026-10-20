@@ -13,6 +13,7 @@ images/           identité reprise du site d'origine, vectorisée : logo, rando
 css/style.css     mise en page
 js/app.js         menus + affichage à partir des JSON
 scraper/scrape.py récupère tout le contenu de l'ancien site
+scraper/raw/      archive de l'ancien site (68 pages + thème), voir son _LISEZMOI.md
 404.html          redirige les anciennes adresses .php vers les nouvelles
 .github/workflows importe l'ancien site depuis GitHub (bouton « Run workflow »)
 ```
@@ -47,6 +48,11 @@ Variante en local : `pip install requests beautifulsoup4 && python scraper/scrap
 
 Pour tester en local : `python -m http.server` puis http://localhost:8000. Ouvrir directement
 `index.html` ne marche pas, car le navigateur bloque la lecture des JSON.
+
+**L'ancien site est archivé dans `scraper/raw/`** : ses 68 pages en HTML brut et son thème,
+pris le 20 octobre 2026. Après la bascule du DNS, l'original n'est plus joignable, et c'est
+donc la seule référence pour vérifier un détail de l'ancien site. Voir `scraper/raw/_LISEZMOI.md`,
+qui signale notamment un piège d'aplatissement des chemins de médias.
 
 ## 3. Ajouter un article
 Ajouter un objet au début de `data/posts.json` :

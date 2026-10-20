@@ -1,0 +1,612 @@
+* 
+{ 
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+body 
+{
+	font: normal normal normal 76% Arial, sans-serif;
+	text-align: center; /* IE centering */
+	background-color: #555;
+	color: #000;
+	padding-top: 15px;
+}
+
+ul, ol, dl
+{
+	margin-left: 1.2em;
+}
+
+h2, h3, h4, h5, h6, p, li, address,
+a:link, a:visited, a:active, a:hover
+{
+	color: #000;
+	text-decoration: none;
+	font-style: normal;
+	
+}
+
+h2 
+{ 
+	display: none;
+	font-weight: bold;
+	line-height: 1.5em;
+	font-size: 1.4em; 
+	margin: 0 0 .7em; 
+	text-transform: lowercase;
+	color: #555;
+}
+
+h3
+{ 
+	font-weight: bold;
+	font-size: 1.3em; 
+	margin: 0 0 .8em; 
+}
+
+
+h4 
+{ 
+	font-weight: bold;
+	line-height: 1.3em;
+	font-size: 1.1em; 
+	margin: 0 0 .5em; 
+	color: #555;
+}
+
+p, address, li, label, button
+{
+	font-size: 1em;
+	line-height: 1.5em;
+	color: #555;
+}
+
+ul
+{
+	list-style-type: square;
+}
+
+table
+{
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#top, #outer, #bottom
+{
+	text-align: left; /* IE centering cancel */
+	width: 960px;
+	margin: 0 auto;
+}
+
+#top
+{
+	padding: 0;
+}
+
+#outer 
+{
+	clear: both;
+	position: relative;
+	background-color: #fff;
+	padding-top: 85px;
+	padding-bottom: 100px;
+	background-image: url('../images/bottom-bg.gif');
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+
+#bottom
+{
+	margin-bottom: 30px;
+}
+
+#header
+{
+	position: absolute;
+	top: 20px;
+	left: 30px;
+	width: 50%;
+	height: 75px;
+	overflow: hidden;
+	background-image: url('../images/itinerance-logo-simple.gif');
+	background-repeat: no-repeat;
+	background-position: left top;
+}
+
+#header h1 a
+{
+	padding-top: 75px;
+	display: block;
+	font-family: "Trebuchet MS", "Geneva CE", lucida, sans-serif;
+	font-size: 1.1em;
+	text-align: left;
+	text-transform: lowercase;
+	font-weight: normal;
+	font-style: italic;
+	letter-spacing: 0px;
+	margin-top: 8px;
+	color: #555;
+}
+
+#menus, #tools, #sections, #bottom .partners
+{
+	list-style-type: none;
+}
+
+#menus, #tools, #menus li, #tools li, #sections, #sections li, #bottom .partners, #bottom .partners li,
+#nav-col ul, #nav-col li
+{
+	margin: 0;
+	padding: 0;
+}
+
+#tools 
+{
+	float: right;
+	height: 25px;
+}
+
+#tools li
+{
+	display: inline;
+}
+
+#tools a:link, #tools a:visited
+{
+	display: block;
+	float: left;
+	font-size: 1em;
+	line-height: 1em;
+	padding: 0 1em;
+	text-transform: lowercase;
+	color: #eee;
+	font-weight: bold;
+	border-right: 1px solid #bbb;
+}
+
+#tools a:active, #tools a:hover, 
+#tools a.active:link, #tools a.active:visited
+{
+	text-decoration: underline;
+	color: #eee;
+}
+
+#tools a.active:link, #tools a.active:visited, #tools a.menu-current
+{
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+#tools a.menu-last
+{
+	border-right: none;
+	padding-right: 0;
+}
+
+#sections 
+{
+}
+
+#sections li, #nav-col li
+{
+display: inline; /* double margin ie6 */
+}
+
+#sections a:link, #sections a:visited, 
+#nav-col li a:link, #nav-col li a:visited
+{
+	display: block;
+	font-size: 1.1em;
+	padding: 0 0 .1em 0;
+	font-weight: normal;
+	text-transform: lowercase;
+}
+
+#nav-col #medias li a:link, #nav-col #medias li a:visited
+{
+	color: #a1b02f;
+	text-transform: none;
+}
+
+#nav-col #medias li p.infos
+{
+	padding-bottom: .75em;
+}
+
+#nav-col a:active, #nav-col a:hover, 
+#sections a:active, #sections a:hover
+{
+	color: #000;
+}
+
+#sections a.active:link, #sections a.active:visited
+{
+	color: #000;
+}
+
+
+.wrap
+{
+	position: relative;
+	z-index: 99;
+	padding: 0 30px 30px;
+}
+
+.main
+{
+	position: relative; /* ie 6 */
+	height: 1%; /* ie 6 and 7 */
+	clear: both;
+	padding: 40px 0 2em;
+	border-top: 1px solid #bbb;
+}
+
+#content
+{
+	clear: both;
+	position: relative; /* ie only */
+}
+
+.with-nav #content
+{
+	float: left; 
+	width: 670px;
+}
+
+.accueil .with-nav #content
+{
+	width: 550px;
+}
+
+#content a.mail:link, #content a.mail:visited
+{
+	font-weight: normal;
+	color: #555;
+}
+
+.accueil #nav-col
+{
+	width: 320px;
+}
+
+#nav-col
+{
+	position: relative; /* ie only */
+	float: right;
+	width: 320px;
+}
+
+
+div
+{
+	position: relative; /* ie 6 only */
+}
+
+#menus
+{
+	position: absolute;
+	right: 30px;
+	top: -25px;
+}
+
+#nav-col h3 a:link, #nav-col h3 a:visited,  
+#nav-col .title a:link, #nav-col .title a:visited,
+#content h3 a:link, #content h3 a:visited,  
+#content .title a:link, #content .title a:visited
+{
+	color: #000;
+	font-weight: normal;
+	display: block;
+}
+
+#menus li
+{
+	display: inline;
+}
+
+#menus a:link, #menus a:visited
+{
+	position: relative; /* ie6 bug */
+	float: left;
+	font-size: 1.5em;
+	display: block;
+	line-height: 1.1em;
+	padding: 0 15px;
+	margin: 0;
+	text-transform: lowercase;
+	color: #555;
+	font-weight: normal;
+	border-left: 1px solid #bbb;
+}
+
+#menus a.first:link, #menus a.first:visited,  #menus a.menu-first
+{
+	border-left: none;
+}
+
+#menus a.last:link, #menus a.last:visited
+{
+	
+}
+
+
+#menus a:active, #menus a:hover
+{
+	color: #000;
+	font-weight: normal;
+}
+
+
+#menus a.active:link, #menus a.active:visited, #menus a.menu-current
+{
+	color: #000;
+	text-transform: uppercase;
+}
+
+#content p, #content ul
+{
+	margin-bottom: 1em;
+}
+
+a:link, a:visited, .vinch
+{
+	font-weight: bold;
+	color: #a1b02f;
+}
+
+#content a:active, #content a:hover,
+#nav-col a:active, #nav-col a:hover
+{
+	text-decoration: underline;
+}
+
+#bottom
+{
+	padding-top: 7px;
+}
+
+#bottom .partners
+{
+	float: left;
+	width: 50%;
+}
+
+#copyright
+{
+	float: right;
+	font-size: .9em;
+	width: 60%;
+	text-align: right;
+	line-height: 40px;
+	color: #000;
+	margin-right: 0; /* cancel default right margin */
+}
+
+#bottom .partners li 
+{
+	display: inline;
+}
+
+#bottom .partners img
+{
+	height: 30px;
+	margin-right: 25px;
+}
+
+#bottom .partners img.patagonia
+{
+	height: 20px;
+}
+
+div.close
+{
+	clear: both;
+}
+
+.accueil #medias
+{
+/*
+	position: relative; /* ie 6 */
+/*
+	float: right;
+	width: 250px;
+	margin-left: 30px;
+*/
+}
+
+.partners td
+{
+	text-align: left;
+	padding: .5em 0 1em;
+}
+
+.signature
+{
+	position: relative;
+	top: -1em;
+	text-align: left;
+	font-size: .9em;
+	color: #336699;
+}
+
+#content h3 a:link, #content h3 a:visited, 
+#content h3 a:active, #content h3 a:hover
+{
+}
+
+#content p.post-info
+{
+	font-size: 1em;
+}
+
+#content p.infos
+{
+	font-size: 1em;
+}
+
+#content p.title
+{
+	text-transform: none;
+	font-size: 1.2em;
+	margin-bottom: .2em;
+}
+
+#content p.title a:link, #content p.title a:visited
+{
+	font-weight: normal;
+	color: #000;
+}
+
+.post .post-chapo
+{
+	display: none;
+}
+
+#content p.day-date
+{
+	font-size: 1em;
+	float: right;
+	margin-right: 0;
+}
+
+.error, .errmsg { color: #000; }
+
+input, textarea, button { border: 1px solid #999; }
+
+
+.vinch 
+{ 
+	font-style: italic; 
+	font-weight: normal;
+	padding: 1em;
+}
+
+code
+{
+	display: block;
+	margin: 0 1em;
+}
+
+
+div.post, div.section
+{
+	margin-bottom: 3em;
+}
+
+
+#syndicate
+{
+}
+
+#nav-col div
+{
+	margin-bottom: 2em;
+}
+
+#nav-col h3, #content h3
+{
+	font-weight: normal;
+	padding-bottom: .4em;
+	font-size: 1.4em;
+	border-bottom: 1px solid #bbb;
+	border-right: 1px solid #fff; /* ie 6 !!!!! to make border-bottom appear */
+}
+
+div.post
+{
+	position: relative;
+}
+
+#img_aleatoire{
+	margin: 0px 10px;
+}
+
+#content h3 a:link, #content h3 a:visited
+{
+}
+
+
+#comments h3
+{	
+	margin-top: 4em;
+
+}
+
+#content strong
+{
+	color: #000;
+}
+
+fieldset 
+{
+	width: 100%;
+}
+
+fieldset input, fieldset textarea
+{
+	float: right;
+}
+
+fieldset textarea
+{
+	width: 60%;
+}
+
+input.preview, input.submit, input.redir
+{
+	margin-left: 1em;
+}
+
+.hidden
+{
+	display: none;
+}
+
+p.submit
+{
+	clear: both;
+}
+
+.captcha span
+{
+	display: block;
+	text-align: right;
+	height: 40px;
+}
+
+div.error
+{
+	padding: 1em 1em .5em;
+	background-color: #fbd776;
+	border: 1px solid #bbb;
+	margin-bottom: 1em;
+}
+
+blockquote
+{
+	border: 1px dotted #bbb;
+	padding: .7em .7em 0;
+	margin-bottom: 1em;
+	background-color: #f3f3f3;
+}
+
+p.form-help
+{
+	clear: both;
+	padding: .5em 0;
+}
+
+#search table
+{
+	width:500px;
+	border:0px;
+	
+}
+
+#search input
+{
+	width:300px;	
+}
